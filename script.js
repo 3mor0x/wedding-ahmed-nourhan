@@ -1,14 +1,106 @@
 /**
- * AURA INVITATIONS - PURE WHITE & GOLD WEDDING EDITION
- * Connected to Firebase Realtime Database (/wishes_ahmed_nourhan.json)
+ * AURA INVITATIONS - BILINGUAL PURE WHITE & GOLD WEDDING EDITION
+ * Arabic & English Dynamic Switcher
  */
 
 const weddingData = {
-    groom: "Ahmed",
-    bride: "Nourhan",
     targetDate: "October 3, 2026 21:00:00",
     firebaseDbUrl: "https://wedding-apps-cc913-default-rtdb.firebaseio.com"
 };
+
+// قاموس الترجمة بين العربي والإنجليزي
+const translations = {
+    ar: {
+        docTitle: "أحمد & نورهان | حفل الزفاف",
+        langBtn: "EN",
+        musicText: "الموسيقى",
+        envTag: "دعوة حفل زفاف",
+        envNames: "أحمد & نورهان",
+        envSub: "نتشرف بحضوركم لمشاركتنا فرحتنا",
+        sealMonogram: "أ&ن",
+        openingTagline: "أنتم مدعوون بكل مودة لمشاركتنا حفل زفافنا",
+        openingTitleNames: "أحمد & نورهان",
+        btnOpen: "افتح الدعوة",
+        heroSubtitle: "بمشاركة عائلتينا، نتشرف بدعوتكم لحضور حفل زفافنا",
+        groom: "أحمد",
+        bride: "نورهان",
+        heroDate: "السبت ٣ أكتوبر ٢٠٢٦",
+        btnDetails: "تفاصيل المكان والموعد",
+        scrollText: "اسحب للأسفل",
+        cdTag: "نحو اليوم الموعود",
+        cdTitle: "العد التنازلي لحفل الزفاف",
+        lblDays: "يوم",
+        lblHours: "ساعة",
+        lblMinutes: "دقيقة",
+        lblSeconds: "ثانية",
+        cdFinished: "بدأ حفل الزفاف المبارك",
+        venueTag: "المكان والموعد",
+        venueTitle: "موقع حفل الزفاف",
+        venueName: "قاعة حفل الزفاف",
+        venueHall: "قاعة الاحتفال الكبرى",
+        venueTime: "السبت ٣-١٠-٢٠٢٦ • من ٩:٠٠ مساءً حتى ١٢:٠٠ منتصف الليل",
+        btnMap: "موقع القاعة على الخريطة",
+        wishesTag: "أطيب الأمنيات",
+        wishesTitle: "سجل المباركات والتهاني",
+        inputNamePlaceholder: "اسمك الكريم",
+        inputMsgPlaceholder: "اكتب تهنئة أو دعوة طيبة لأحمد ونورهان...",
+        btnSendWish: "إرسال التهنئة",
+        btnSending: "جاري الإرسال...",
+        loadingWishes: "جاري تحميل المباركات...",
+        emptyWishesAuthor: "أحمد ونورهان",
+        emptyWishesMsg: "كن أول من يشاركنا دعواته وأمنياته الطيبة!",
+        emptyWishesDate: "يوم الزفاف",
+        footerNames: "أحمد & نورهان",
+        footerMsg: "بقلوب يملؤها الفرح والمحبة، نتشرف بدعوتكم لمشاركتنا فرحة يوم زفافنا.<br>حضوركم يكتمل به سرورنا ونحن نخطو أولى خطوات حياتنا معاً 🤍",
+        footerDate: "السبت ٣ أكتوبر ٢٠٢٦ • ٩:٠٠ م – ١٢:٠٠ ص"
+    },
+    en: {
+        docTitle: "Ahmed & Nourhan | The Wedding Celebration",
+        langBtn: "عربي",
+        musicText: "MUSIC",
+        envTag: "WEDDING INVITATION",
+        envNames: "Ahmed & Nourhan",
+        envSub: "The Honor of Your Presence is Requested",
+        sealMonogram: "A&N",
+        openingTagline: "YOU ARE CORDIALLY INVITED TO CELEBRATE OUR WEDDING",
+        openingTitleNames: "Ahmed & Nourhan",
+        btnOpen: "OPEN INVITATION",
+        heroSubtitle: "Together with our families, we invite you to celebrate our wedding",
+        groom: "Ahmed",
+        bride: "Nourhan",
+        heroDate: "Saturday, October 3, 2026",
+        btnDetails: "VENUE & TIME DETAILS",
+        scrollText: "SCROLL TO EXPLORE",
+        cdTag: "COUNTING DOWN",
+        cdTitle: "The Wedding Countdown",
+        lblDays: "DAYS",
+        lblHours: "HOURS",
+        lblMinutes: "MINUTES",
+        lblSeconds: "SECONDS",
+        cdFinished: "THE CELEBRATION HAS BEGUN",
+        venueTag: "VENUE & TIME",
+        venueTitle: "Wedding Venue & Details",
+        venueName: "Wedding Celebration Hall",
+        venueHall: "Grand Celebration Ballroom",
+        venueTime: "Saturday 3/10/2026 • From 9:00 PM to 12:00 AM",
+        btnMap: "THE LOCATION ON MAP",
+        wishesTag: "WARM BLESSINGS",
+        wishesTitle: "Send Your Wishes",
+        inputNamePlaceholder: "Your Name",
+        inputMsgPlaceholder: "Leave a heartfelt blessing for Ahmed & Nourhan...",
+        btnSendWish: "SEND BLESSING",
+        btnSending: "SENDING...",
+        loadingWishes: "Loading blessings...",
+        emptyWishesAuthor: "Ahmed & Nourhan",
+        emptyWishesMsg: "Be the first to share your warm wishes and blessings with us!",
+        emptyWishesDate: "Wedding Day",
+        footerNames: "Ahmed & Nourhan",
+        footerMsg: "With hearts full of joy and love, we warmly invite you to celebrate our wedding day.<br>Your presence will make our celebration complete as we step into our new life together 🤍",
+        footerDate: "Saturday, October 3, 2026 • 9:00 PM – 12:00 AM"
+    }
+};
+
+let currentLang = 'ar';
 
 document.addEventListener('DOMContentLoaded', () => {
     initParticles();
@@ -16,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAudioSystem();
     initCountdown();
     initScrollAnimations();
+    initLanguageSwitcher();
     initWishesSystem();
 });
 
@@ -124,7 +217,7 @@ function playAudio() {
     }).catch(err => console.log("Audio playback deferred:", err));
 }
 
-// 4. COUNTDOWN TIMER (3/10/2026 at 9:00 PM)
+// 4. COUNTDOWN TIMER
 function initCountdown() {
     const target = new Date(weddingData.targetDate).getTime();
 
@@ -143,7 +236,7 @@ function initCountdown() {
             document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
             document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
         } else {
-            document.getElementById('countdownTimer').innerHTML = `<p class="section-title">THE CELEBRATION HAS BEGUN</p>`;
+            document.getElementById('countdownTimer').innerHTML = `<p class="section-title">${translations[currentLang].cdFinished}</p>`;
         }
     };
 
@@ -168,40 +261,85 @@ function triggerHeroTextAnimations() {
     });
 }
 
-// 6. FIREBASE WISHES SYSTEM (مسار نظيف ومنفصل لفرح أحمد ونورهان)
+// 6. LANGUAGE SWITCHER SYSTEM (عربي / English)
+function initLanguageSwitcher() {
+    const btnLang = document.getElementById('btnLangToggle');
+    btnLang.addEventListener('click', () => {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        applyLanguage(currentLang);
+    });
+}
+
+function applyLanguage(lang) {
+    const t = translations[lang];
+    const htmlEl = document.documentElement;
+
+    htmlEl.setAttribute('lang', lang);
+    htmlEl.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    document.title = t.docTitle;
+
+    // زر التبديل والموسيقى
+    document.getElementById('langLabel').textContent = t.langBtn;
+    document.getElementById('musicText').textContent = t.musicText;
+
+    // الأسماء والظرف
+    document.getElementById('envNames').textContent = t.envNames;
+    document.getElementById('sealMonogram').textContent = t.sealMonogram;
+    document.getElementById('openingTitleNames').textContent = t.openingTitleNames;
+    document.getElementById('groomName').textContent = t.groom;
+    document.getElementById('brideName').textContent = t.bride;
+    document.getElementById('footerMonogram').textContent = t.footerNames;
+
+    // placeholders
+    document.getElementById('wishName').placeholder = t.inputNamePlaceholder;
+    document.getElementById('wishMessage').placeholder = t.inputMsgPlaceholder;
+
+    // باقي النصوص المعلمة بـ data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) {
+            el.innerHTML = t[key];
+        }
+    });
+
+    // إعادة تحميل قائمة المباركات لتحديث النصوص الثابتة
+    if (typeof window.reloadWishes === 'function') {
+        window.reloadWishes();
+    }
+}
+
+// 7. FIREBASE WISHES SYSTEM (بالوقت والثانية ومسار مستقل)
 function initWishesSystem() {
     const form = document.getElementById('wishesForm');
     const list = document.getElementById('wishesList');
     const submitBtn = document.getElementById('wishSubmitBtn');
 
-    // مسار مخصص جديد لتجنب ظهور أي داتا قديمة نهائياً
     const endpoint = `${weddingData.firebaseDbUrl}/wishes_ahmed_nourhan.json`;
 
     const renderWishes = async () => {
-        list.innerHTML = `<p style="text-align:center; color: var(--color-gold); font-size: 0.85rem;">Loading blessings...</p>`;
+        const t = translations[currentLang];
+        list.innerHTML = `<p style="text-align:center; color: var(--color-gold); font-size: 0.85rem;">${t.loadingWishes}</p>`;
 
         try {
             const res = await fetch(endpoint);
             
             if (res.status === 401 || res.status === 403) {
-                list.innerHTML = `<p style="text-align:center; color: var(--color-gold-dark); font-size: 0.85rem;">يرجى تفعيل صلاحيات القراءة في Firebase (Rules -> Publish).</p>`;
+                list.innerHTML = `<p style="text-align:center; color: var(--color-gold-dark); font-size: 0.85rem;">يرجى التحقق من قواعد Firebase (Rules -> Publish).</p>`;
                 return;
             }
 
             const data = await res.json();
 
-            // في حالة كانت قاعدة البيانات فارغة وجديدة
             if (!data || Object.keys(data).length === 0) {
                 list.innerHTML = `
                     <div class="wish-note">
-                        <div class="wish-author">Ahmed &amp; Nourhan</div>
-                        <div class="wish-message">"Be the first to share your warm wishes and blessings with us!"</div>
-                        <div class="wish-date"><i class="fa-regular fa-clock"></i> Wedding Day</div>
+                        <div class="wish-author">${t.emptyWishesAuthor}</div>
+                        <div class="wish-message">"${t.emptyWishesMsg}"</div>
+                        <div class="wish-date"><i class="fa-regular fa-clock"></i> ${t.emptyWishesDate}</div>
                     </div>`;
                 return;
             }
 
-            // استخراج وتصفية الرسائل الصالحة فقط وترتيبها من الأحدث للأقدم
             const wishesArray = Object.values(data)
                 .filter(item => item && (item.name || item.message))
                 .reverse();
@@ -209,9 +347,9 @@ function initWishesSystem() {
             if (wishesArray.length === 0) {
                 list.innerHTML = `
                     <div class="wish-note">
-                        <div class="wish-author">Ahmed &amp; Nourhan</div>
-                        <div class="wish-message">"Be the first to share your warm wishes and blessings with us!"</div>
-                        <div class="wish-date"><i class="fa-regular fa-clock"></i> Wedding Day</div>
+                        <div class="wish-author">${t.emptyWishesAuthor}</div>
+                        <div class="wish-message">"${t.emptyWishesMsg}"</div>
+                        <div class="wish-date"><i class="fa-regular fa-clock"></i> ${t.emptyWishesDate}</div>
                     </div>`;
                 return;
             }
@@ -230,6 +368,8 @@ function initWishesSystem() {
         }
     };
 
+    window.reloadWishes = renderWishes;
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -238,12 +378,12 @@ function initWishesSystem() {
 
         if (!name || !message) return;
 
+        const t = translations[currentLang];
         submitBtn.disabled = true;
-        submitBtn.querySelector('.btn-text').textContent = "SENDING...";
+        submitBtn.querySelector('.btn-text').textContent = t.btnSending;
 
-        // التاريخ والوقت بالثانية
         const now = new Date();
-        const formattedDateTime = now.toLocaleString('en-US', {
+        const formattedDateTime = now.toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
@@ -271,13 +411,13 @@ function initWishesSystem() {
 
             form.reset();
             submitBtn.disabled = false;
-            submitBtn.querySelector('.btn-text').textContent = "SEND BLESSING";
+            submitBtn.querySelector('.btn-text').textContent = t.btnSendWish;
             renderWishes();
         } catch (err) {
             console.error("Firebase save error:", err);
-            alert("Could not post blessing. Make sure Firebase Rules are published as true.");
+            alert("Could not post blessing. Check Firebase rules.");
             submitBtn.disabled = false;
-            submitBtn.querySelector('.btn-text').textContent = "SEND BLESSING";
+            submitBtn.querySelector('.btn-text').textContent = t.btnSendWish;
         }
     });
 
