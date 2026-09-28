@@ -1,6 +1,6 @@
 /**
  * AURA INVITATIONS - PURE WHITE & GOLD WEDDING EDITION
- * Connected to Firebase Realtime Database (/wishes.json)
+ * Connected to Firebase Realtime Database (/wishes_ahmed_nourhan.json)
  */
 
 const weddingData = {
@@ -168,42 +168,65 @@ function triggerHeroTextAnimations() {
     });
 }
 
-// 6. FIREBASE WISHES SYSTEM
+// 6. FIREBASE WISHES SYSTEM (مسار نظيف ومنفصل لفرح أحمد ونورهان)
 function initWishesSystem() {
     const form = document.getElementById('wishesForm');
     const list = document.getElementById('wishesList');
     const submitBtn = document.getElementById('wishSubmitBtn');
 
+    // مسار مخصص جديد لتجنب ظهور أي داتا قديمة نهائياً
+    const endpoint = `${weddingData.firebaseDbUrl}/wishes_ahmed_nourhan.json`;
+
     const renderWishes = async () => {
-        list.innerHTML = `<p style="text-align:center; color: var(--color-gold); font-size: 0.8rem;">Loading blessings...</p>`;
+        list.innerHTML = `<p style="text-align:center; color: var(--color-gold); font-size: 0.85rem;">Loading blessings...</p>`;
 
         try {
-            const res = await fetch(`${weddingData.firebaseDbUrl}/wishes.json`);
+            const res = await fetch(endpoint);
+            
+            if (res.status === 401 || res.status === 403) {
+                list.innerHTML = `<p style="text-align:center; color: var(--color-gold-dark); font-size: 0.85rem;">يرجى تفعيل صلاحيات القراءة في Firebase (Rules -> Publish).</p>`;
+                return;
+            }
+
             const data = await res.json();
 
-            if (!data) {
+            // في حالة كانت قاعدة البيانات فارغة وجديدة
+            if (!data || Object.keys(data).length === 0) {
                 list.innerHTML = `
                     <div class="wish-note">
-                        <div class="wish-author">Family &amp; Friends</div>
-                        <div class="wish-message">"Wishing you a lifetime filled with unconditional love, laughter, and endless joy!"</div>
-                        <div class="wish-date">October 2026</div>
+                        <div class="wish-author">Ahmed &amp; Nourhan</div>
+                        <div class="wish-message">"Be the first to share your warm wishes and blessings with us!"</div>
+                        <div class="wish-date"><i class="fa-regular fa-clock"></i> Wedding Day</div>
                     </div>`;
                 return;
             }
 
-            const wishesArray = Object.values(data).reverse();
+            // استخراج وتصفية الرسائل الصالحة فقط وترتيبها من الأحدث للأقدم
+            const wishesArray = Object.values(data)
+                .filter(item => item && (item.name || item.message))
+                .reverse();
+
+            if (wishesArray.length === 0) {
+                list.innerHTML = `
+                    <div class="wish-note">
+                        <div class="wish-author">Ahmed &amp; Nourhan</div>
+                        <div class="wish-message">"Be the first to share your warm wishes and blessings with us!"</div>
+                        <div class="wish-date"><i class="fa-regular fa-clock"></i> Wedding Day</div>
+                    </div>`;
+                return;
+            }
 
             list.innerHTML = wishesArray.map(item => `
                 <div class="wish-note">
-                    <div class="wish-author">${escapeHtml(item.name)}</div>
-                    <div class="wish-message">"${escapeHtml(item.message)}"</div>
-                    <div class="wish-date">${item.date || "October 2026"}</div>
+                    <div class="wish-author">${escapeHtml(item.name || "Guest")}</div>
+                    <div class="wish-message">"${escapeHtml(item.message || "")}"</div>
+                    <div class="wish-date"><i class="fa-regular fa-clock"></i> ${escapeHtml(item.fullDateTime || item.date || "Just now")}</div>
                 </div>
             `).join('');
 
         } catch (err) {
             console.error("Firebase fetch error:", err);
-            list.innerHTML = `<p style="text-align:center; color: var(--color-text-muted);">Could not load blessings.</p>`;
+            list.innerHTML = `<p style="text-align:center; color: var(--color-text-muted); font-size: 0.85rem;">Could not connect to database.</p>`;
         }
     };
 
@@ -218,27 +241,41 @@ function initWishesSystem() {
         submitBtn.disabled = true;
         submitBtn.querySelector('.btn-text').textContent = "SENDING...";
 
+        // التاريخ والوقت بالثانية
+        const now = new Date();
+        const formattedDateTime = now.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+
         const newWish = {
             name: name,
             message: message,
-            date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
-            timestamp: new Date().toISOString()
+            fullDateTime: formattedDateTime,
+            timestamp: now.toISOString()
         };
 
         try {
-            await fetch(`${weddingData.firebaseDbUrl}/wishes.json`, {
+            const res = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newWish)
             });
+
+            if (!res.ok) throw new Error("Permission denied or database error");
 
             form.reset();
             submitBtn.disabled = false;
             submitBtn.querySelector('.btn-text').textContent = "SEND BLESSING";
             renderWishes();
         } catch (err) {
-            console.error("Firebase error:", err);
-            alert("Could not post blessing. Please try again.");
+            console.error("Firebase save error:", err);
+            alert("Could not post blessing. Make sure Firebase Rules are published as true.");
             submitBtn.disabled = false;
             submitBtn.querySelector('.btn-text').textContent = "SEND BLESSING";
         }
@@ -248,5 +285,5 @@ function initWishesSystem() {
 }
 
 function escapeHtml(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
