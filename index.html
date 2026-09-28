@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Wedding Invitation - Ahmed &amp; Nourhan">
+    <title>Ahmed &amp; Nourhan | The Wedding Celebration</title>
+    
+    <!-- Favicon ذهبي رايق -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%23FFFFFF%22 stroke=%22%23C59D42%22 stroke-width=%224%22/><text x=%2250%%22 y=%2255%%22 font-size=%2255%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 fill=%22%23C59D42%22 font-family=%22serif%22>✨</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- خلفية الجزيئات الذهبية الحية -->
+    <canvas id="particlesCanvas"></canvas>
+
+    <!-- Background Audio -->
+    <audio id="weddingAudio" loop preload="auto">
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="invitation-container">
+
+        <!-- ==========================================
+             0. OPENING ENVELOPE SCREEN
+             ========================================== -->
+        <section id="opening" class="opening-screen">
+            <div class="envelope-wrapper">
+                <div class="envelope" id="envelope">
+                    <div class="envelope-back"></div>
+                    <div class="letter" id="letter">
+                        <div class="letter-content">
+                            <span class="letter-tag">WEDDING INVITATION</span>
+                            <h2 class="letter-names-script">Ahmed &amp; Nourhan</h2>
+                            <p class="letter-sub">The Honor of Your Presence is Requested</p>
+                            <div class="botanical-monogram">
+                                <i class="fa-solid fa-leaf"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="envelope-flap" id="flap"></div>
+                    <div class="wax-seal" id="waxSeal" aria-label="Open Invitation">
+                        <div class="wax-seal-inner">
+                            <span>A&amp;N</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="opening-actions">
+                <p class="opening-tagline">YOU ARE CORDIALLY INVITED TO CELEBRATE OUR WEDDING</p>
+                <h1 class="opening-title-script">Ahmed &amp; Nourhan</h1>
+                <button class="btn-luxury shine-effect" id="btnOpenInvitation">
+                    <span class="btn-text">OPEN INVITATION</span>
+                    <span class="btn-border"></span>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ==========================================
+             MAIN CONTENT
+             ========================================== -->
+        <main id="mainContent" class="main-content hidden">
+
+            <!-- Floating Audio Control -->
+            <div class="floating-controls">
+                <button id="btnMusicToggle" class="floating-btn music-btn paused" aria-label="Toggle Music">
+                    <div class="disc-icon">
+                        <i class="fa-solid fa-compact-disc"></i>
+                    </div>
+                    <span class="music-label">MUSIC</span>
+                </button>
+            </div>
+
+
+            <!-- ==========================================
+                 1. HERO SECTION (بدون صورة خلفية)
+                 ========================================== -->
+            <section id="hero" class="hero-section">
+                <div class="hero-bg-wrapper">
+                    <div class="hero-pure-bg"></div>
+                    <div class="hero-gold-glow"></div>
+                </div>
+
+                <div class="hero-content">
+                    
+                    <!-- الآية القرآنية بالبرواز الذهبي -->
+                    <div class="quran-framed-box reveal-text">
+                        <p class="bismillah">﷽</p>
+                        <p class="quran-text">« وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً »</p>
+                    </div>
+
+                    <span class="hero-subtitle reveal-text">Together with our families, we invite you to celebrate our wedding</span>
+                    
+                    <!-- الأسماء بالكاليجرافي الذهبي -->
+                    <div class="hero-names-wrapper reveal-text">
+                        <h1 class="hero-title-script">
+                            <span>Ahmed</span>
+                            <span class="script-amp">&amp;</span>
+                            <span>Nourhan</span>
+                        </h1>
+                    </div>
+                    
+                    <div class="hero-date-badge reveal-text">
+                        <span>Saturday, October 3, 2026</span>
+                    </div>
+
+                    <a href="#venue" class="btn-gold-line reveal-text shine-effect">VENUE &amp; TIME DETAILS</a>
+                </div>
+
+                <div class="scroll-indicator">
+                    <span class="scroll-text">SCROLL TO EXPLORE</span>
+                    <div class="scroll-line"></div>
+                </div>
+            </section>
+
+
+            <!-- ==========================================
+                 2. COUNTDOWN SECTION
+                 ========================================== -->
+            <section id="countdownSection" class="section-padding countdown-section">
+                <div class="section-header">
+                    <span class="section-tag">COUNTING DOWN</span>
+                    <h2 class="section-title">The Wedding Countdown</h2>
+                    <div class="botanical-divider"></div>
+                </div>
+
+                <div class="countdown-container" id="countdownTimer">
+                    <div class="countdown-card decor-box">
+                        <span class="countdown-num pulse-anim" id="cdDays">00</span>
+                        <span class="countdown-label">DAYS</span>
+                    </div>
+                    <div class="countdown-card decor-box">
+                        <span class="countdown-num pulse-anim" id="cdHours">00</span>
+                        <span class="countdown-label">HOURS</span>
+                    </div>
+                    <div class="countdown-card decor-box">
+                        <span class="countdown-num pulse-anim" id="cdMinutes">00</span>
+                        <span class="countdown-label">MINUTES</span>
+                    </div>
+                    <div class="countdown-card decor-box">
+                        <span class="countdown-num pulse-anim" id="cdSeconds">00</span>
+                        <span class="countdown-label">SECONDS</span>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ==========================================
+                 3. VENUE & TIME SECTION
+                 ========================================== -->
+            <section id="venue" class="section-padding venue-section">
+                <div class="section-header">
+                    <span class="section-tag">VENUE &amp; TIME</span>
+                    <h2 class="section-title">Wedding Venue &amp; Details</h2>
+                    <div class="botanical-divider"></div>
+                </div>
+
+                <div class="venue-card decor-box">
+                    <div class="venue-details">
+                        <h3 class="venue-title">Wedding Celebration Hall</h3>
+                        <p class="venue-hall"><i class="fa-solid fa-champagne-glasses"></i> Grand Celebration Ballroom 💍</p>
+                        <p class="venue-time"><i class="fa-regular fa-clock"></i> Saturday 3/10/2026 • From 9:00 PM to 12:00 AM</p>
+                        
+                        <div class="venue-actions">
+                            <a id="venueMapBtn" href="https://maps.app.goo.gl/nHFvnUAe2TrehnXp8" target="_blank" rel="noopener" class="btn-luxury btn-full shine-effect">
+                                <span class="btn-text"><i class="fa-solid fa-location-dot"></i> THE LOCATION ON MAP</span>
+                                <span class="btn-border"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ==========================================
+                 4. WISHES / GUESTBOOK SECTION (FIREBASE)
+                 ========================================== -->
+            <section id="wishes" class="section-padding wishes-section">
+                <div class="section-header">
+                    <span class="section-tag">WARM BLESSINGS</span>
+                    <h2 class="section-title">Send Your Wishes</h2>
+                    <div class="botanical-divider"></div>
+                </div>
+
+                <div class="wishes-container">
+                    <form id="wishesForm" class="wishes-form decor-box">
+                        <div class="form-group">
+                            <input type="text" id="wishName" required placeholder="Your Name">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="wishMessage" rows="3" required placeholder="Leave a heartfelt blessing for Ahmed &amp; Nourhan..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-luxury btn-full shine-effect" id="wishSubmitBtn">
+                            <span class="btn-text">SEND BLESSING</span>
+                            <span class="btn-border"></span>
+                        </button>
+                    </form>
+
+                    <div id="wishesList" class="wishes-list">
+                        <!-- Dynamic Firebase Notes -->
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- ==========================================
+                 5. FOOTER & BRAND RIGHTS
+                 ========================================== -->
+            <footer class="footer-section">
+                <div class="footer-content">
+                    <span class="footer-monogram-script">Ahmed &amp; Nourhan</span>
+                    <div class="botanical-divider"></div>
+                    
+                    <p class="footer-invitation-msg">
+                        With hearts full of joy and love, we warmly invite you to celebrate our wedding day.<br>
+                        Your presence will make our celebration complete as we step into our new life together 🤍
+                    </p>
+
+                    <p class="footer-date">Saturday, October 3, 2026 • 9:00 PM – 12:00 AM</p>
+                    <div class="botanical-divider"></div>
+                    
+                    <p class="footer-credit">AURA INVITATIONS • DIGITAL EXPERIENCE</p>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
